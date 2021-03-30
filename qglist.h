@@ -47,7 +47,7 @@ public:
 	/*
 	 * 在链表第一个元素前添加元素e
 	 */
-	bool push_front(ElemType& e);
+	bool push_front(const ElemType& e);
 
 	/*
 	 * 删除链表第一个元素
@@ -57,7 +57,7 @@ public:
 	/*
 	 * 在链表最后一个元素后添加元素e
 	 */
-	bool push_back(ElemType& e);
+	bool push_back(const ElemType& e);
 
 	/*
 	 * 删除链表最后一个元素
@@ -67,7 +67,7 @@ public:
 	/*
 	 * 在链表的第index + 1个元素前插入元素e
 	 */
-	bool insert(unsigned int index, ElemType& e);
+	bool insert(unsigned int index, const ElemType& e);
 
 	/*
 	 * 删除任意位置元素
@@ -82,7 +82,7 @@ public:
 	/*
 	 * 查找元素是否存在
 	 */
-	bool contain(ElemType& e);
+	bool contain(const ElemType& e);
         
 	/*
 	 * 返回链表中元素的数量
@@ -92,11 +92,11 @@ public:
 	/*
 	 * 遍历链表, 对每个元素调用visit指向的函数
 	 */
-	bool traverse(void (*visit)(ElemType& e));
+	bool traverse(void (*visit)(const ElemType& e));
 	/*
 	 * 输出传入的数据
 	 */
-	void visit(ElemType& e);
+	void visit(const ElemType& e);
 };
 
 #endif

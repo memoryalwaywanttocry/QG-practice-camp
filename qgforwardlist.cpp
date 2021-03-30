@@ -6,7 +6,7 @@ using namespace std;
 	 //初始化一个空头
 	 struct Node* Temp = new struct Node;
 	 Temp->data = 0;
-	 Temp->next = NULL;
+	 Temp->next = nullptr;
 	 //头尾节点都是它
 	 head = Temp;
 	 tail = Temp; 
@@ -15,7 +15,7 @@ using namespace std;
  {
 	 //逐个删除所有节点
 	 Node* pTemp = head;
-	 while (pTemp!= NULL)
+	 while (pTemp!= nullptr)
 	 {
 		 Node* pT = pTemp;
 		 pTemp = pTemp->next;
@@ -24,7 +24,9 @@ using namespace std;
  }
  ElemType& QGForwardList:: front()noexcept
  {
-	 return head->data;
+	/* if (head->next == nullptr)
+		 return ;*/
+	 return head->next ->data;
  }
  ElemType& QGForwardList:: back()noexcept
  {
@@ -32,61 +34,73 @@ using namespace std;
  }
  bool QGForwardList:: push_front(ElemType& e)
  {
-	 if (head == NULL)
-		 return false;
-	 //创建新节点
 	 Node* pTemp = new struct Node;
-	 //节点成员赋值
 	 pTemp->data = e;
-	 //连接
-	 pTemp->next = head;
-	 head = pTemp;
+	 if (head->next == nullptr)//只有头节点的时候，加在头节点之后
+	 {
+		 head->next = pTemp;
+		 return true;
+	 }
+	 pTemp->next = head->next ;
+	 head->next  = pTemp;
 	 return true;
  }
  bool QGForwardList:: pop_front()
  {
-	 if (NULL == head)
-		 return false;
-	 Node* pT = head;
-	 head = head->next;
+	 if (nullptr == head->next)//若只有头节点，则删除头
+	 {
+		 Node* pTemp = head;
+		 head = nullptr;
+		 delete pTemp;
+		 return true;
+	 }
+	 Node* pT = head->next;
+	 head->next  = pT->next ;
 	 delete pT;
 	 return true;
  }
  bool QGForwardList:: push_back(ElemType& e)
  {
-	 if (NULL == head)
-		 return false;
 	 Node* pTemp = new struct Node;
 	 pTemp->data = e;
-	 pTemp->next = NULL;
+	 pTemp->next = nullptr;
+	 if (nullptr == head->next)
+	 {
+		 head->next = pTemp;
+		 return true;
+	 }
 	 tail->next = pTemp;
 	 tail = pTemp;
 	 return true;
  }
  bool QGForwardList:: pop_back()
  {
-	 if (NULL == head)
+	 if (nullptr == head->next )
 		 return false;
 	 //记住头尾，循环找到前一个，尾指针指向前一个，前一个的Next指针赋空，delete标记的尾节点
 	 Node* pTemp = tail;
 	 Node* pT = head;
 	 while (pT->next != tail)
 		 pT = pT->next;
-	 pT->next = NULL;
+	 pT->next = nullptr;
 	 pT = tail; 
 	 delete pTemp;
 	 return true;
  }
  bool QGForwardList:: insert(unsigned int index, ElemType& e)
  {
+	 //index应该不包含头节点
 	 //合法性检测
-	 if (NULL == head->next )
+	 if (nullptr == head->next )
 		 return false;
 	 //特殊情况判定
-	 if(0 == index)
+	 if (0 == index)
+	 {
 		 push_front(e);
-	 unsigned int i = 0;
-	 Node* pT = head;
+		 return true;
+	 }
+	 unsigned int i = 1;
+	 Node* pT = head->next ;
 	 while (pT != tail)
 	 {
 		i++;
@@ -96,16 +110,14 @@ using namespace std;
 	 }
 	 //如果给的index大于节点数量，尾添加
 	 if (pT == tail)
+	 {
 		 push_front(e);
+		 return true;
+	 }
 	 else
 	 {
-		 //创建新节点
 		 Node* pTemp = new struct Node;
-		 if (pT == NULL)
-			 return false;
-		//成员赋值
 		 pTemp->data = e;
-		 //链接到链表上
 		 pTemp->next = pT->next;
 		 pT->next = pTemp;
 		 return true;
@@ -114,7 +126,7 @@ using namespace std;
  bool QGForwardList:: erase(unsigned int index)
  {
 	 //合法性检测
-	 if (NULL == head->next )
+	 if (nullptr == head->next )
 		 return false;
 	 //特殊情况
 	 //只有一个节点
@@ -122,15 +134,18 @@ using namespace std;
 	 {
 		 Node* pT = head;
 		 delete pT;
-		 head = NULL;
-		 tail = NULL;
+		 head = nullptr;
+		 tail = nullptr;
 		 return true;
 	 }
-	 //如果想删除的是头节点
-	 if(0 == index)
+	 //如果想删除的是第一个非空节点元素
+	 if (0 == index)
+	 {
 		 pop_front();
+		 return true;
+	 }
 	 unsigned int i = 0;
-	 Node* pT = head;
+	 Node* pT = head->next ;
 	 //删除某一个，需要找到其前一个
 	 while (pT != tail)
 	 {
@@ -141,8 +156,11 @@ using namespace std;
 	 }
 	//如果给的index大于节点数量，删除最后一个 
 	 if (pT == tail)
+	 {
 		 pop_back();
-	 else if(pT != NULL)
+		 return true;
+	 }
+	 else if(pT != nullptr)
 	 {
 		 Node* pTemp = pT->next;//记录一下要删除的节点
 		 pT->next = pTemp->next;
@@ -152,47 +170,46 @@ using namespace std;
  }
  bool QGForwardList:: clear()
  {
-	 if (NULL == head)
+	 if (nullptr == head->next )
 		 return false;
-	 //循环逐个delete节点,最后头尾赋空
-	 Node* pTemp = head;
-	 while (pTemp!= NULL)
+	 //循环逐个delete节点,最后尾也指向空头
+	 Node* pTemp = head->next ;
+	 while (pTemp!= nullptr)
 	 {
 		 Node* pT = pTemp;
 		 pTemp = pTemp->next;
 		 delete pT;
 	 }
-	 head = NULL;
-	 tail = NULL;
+	 tail = head;
 	 return true;
  }
  bool QGForwardList:: contain(ElemType& e)
  {
-	 if (NULL == head)
+	 if (nullptr == head->next )
 		 return false;
-	 Node* pT = head;
-	 while (pT != NULL)
+	 Node* pT = head->next ;
+	 while (pT != nullptr)
 	 {
 		 if (pT->data == e)
 			 break;
 		 pT = pT->next;
 	 }
-	 if (pT != NULL)
+	 if (pT != nullptr)
 		 return true;
 	 return false;
  }
  unsigned int QGForwardList:: size()noexcept
  {
-	 if (NULL == head)
+	 if (nullptr == head->next )
 		 return 0;
 	 unsigned int icount = 0;
-	 for (Node* pT = head; pT != NULL; pT = pT->next)
+	 for (Node* pT = head->next ; pT != NULL; pT = pT->next)
 		 icount++;
 	 return icount;
  }
  void QGForwardList:: traverse(void (*visit)(ElemType& e))
  {
-	 if (NULL == head)
+	 if (nullptr == head->next )
 		 return;
 	 for (Node* pT = head; pT != NULL; pT = pT->next)
 	 {
@@ -202,109 +219,30 @@ using namespace std;
  }
  void QGForwardList::SwapNodebyIndex(int Index1, int Index2)
  {
-	 if (NULL == head || Index1 < 0 || Index2 < 0 || Index1 == Index2)//合法性检测
+	 if (nullptr == head->next  || Index1 < 0 || Index2 < 0 || Index1 == Index2)//合法性检测
 		 return;
 	 //特殊情况
 	 if (head == tail)
 		 return;
-	 //头节点跟其他节点交换
-	 if (Index1 == 0)
-	 {
-		 Node* pTemp1 = head;
-		 Node* pTemp2 = head;
-		 unsigned int i = 0;
-		 for (pTemp2; pTemp2 != tail; pTemp2 = pTemp2->next)
-		 {
-			 i++;
-			 if (i == Index2 - 1)//找到要交换的节点的前一个
-			 {
-				 break;
-			 }
-		 }
-		 if (pTemp2 != tail)//头不是跟尾交换
-		 {
-			 pTemp1->next = pTemp2->next;
-			 pTemp2->next = pTemp1->next;
-			 pTemp2->next->next = pTemp1->next->next;
-			 pTemp1->next->next = pTemp2->next->next;
-			 pTemp2->next  = head;
-			 return;
-		 } 
-		 else if (pTemp2 == tail)//头跟尾交换
-		 {
-			 pTemp1->next = pTemp2->next;
-			 pTemp2->next = pTemp1->next;
-			 pTemp2->next->next = pTemp1->next->next;
-			 pTemp1->next->next = pTemp2->next->next;
-			 pTemp2->next  = head;
-			 pTemp1->next  = tail;
-			 return;
-		 }
-	 }
-	 if (Index2 == 0)
-	 {
-		 Node* pTemp1 = head;
-		 Node* pTemp2 = head;
-		 unsigned int i = 0;
-		 for (pTemp2; pTemp2 != tail; pTemp2 = pTemp2->next)
-		 {
-			 i++;
-			 if (i == Index1 - 1)//找到要交换的节点的前一个
-			 {
-				 break;
-			 }
-		 }
-		 if (pTemp2 != tail)
-		 {
-			 pTemp1->next = pTemp2->next;
-			 pTemp2->next = pTemp1->next;
-			 pTemp2->next->next = pTemp1->next->next;
-			 pTemp1->next->next = pTemp2->next->next; 
-			 pTemp2->next  = head;
-			 return;
-		 }	
-		 else if (pTemp2 == tail)
-		 {
-			 pTemp1->next = pTemp2->next;
-			 pTemp2->next = pTemp1->next;
-			 pTemp2->next->next = pTemp1->next->next;
-			 pTemp1->next->next = pTemp2->next->next;
-			 pTemp2->next  = head;
-			 pTemp1->next  = tail;
-			 return;
-		 }
-	 }
-	 if (head->next == tail)//有2个节点
-	 {
-		 tail->next = head;
-		 head->next = NULL;
-		 Node* PT = tail;
-		 tail = head;
-		 head = PT;
-		 return;
-	 }
 	 //（2个中间节点的交换）+ //尾节点跟其他节点交换
 	 unsigned int i = 0;
-	 Node* pTemp1 = head;
-	 for (pTemp1; pTemp1 != NULL; pTemp1 = pTemp1->next)
+	 Node* pTemp1 = head->next ;
+	 for (pTemp1; pTemp1 != tail; pTemp1 = pTemp1->next)
 	 {
 		 i++;
 		 if (i == Index1 - 1)//找到要交换的节点的前一个
-		 {
 			 break;
-		 }
 	 }
 	 i = 0;
-	 Node* pTemp2 = head;
-	 for (pTemp2; pTemp2 != NULL; pTemp2 = pTemp2->next)
+	 Node* pTemp2 = head->next ;
+	 for (pTemp2; pTemp2 != tail; pTemp2 = pTemp2->next)
 	 {
 		 i++;
 		 if (i == Index2 - 1)//找到要交换的节点的前一个
-		 {
 			 break;
-		 }
 	 }
-	 if ((pTemp1 != NULL && pTemp2 != tail)|| pTemp1 != tail && pTemp2 != NULL)
+	 //2个节点都找得到，并且没有尾指针
+	 if ((pTemp1 != nullptr && pTemp2 != nullptr && pTemp2 != tail)|| (pTemp1 != nullptr && pTemp1 != tail && pTemp2 != nullptr))
 	 {
 		 pTemp1->next = pTemp2->next;
 		 pTemp2->next = pTemp1->next;
@@ -312,26 +250,27 @@ using namespace std;
 		 pTemp1->next->next = pTemp2->next->next;
 		 return;
 	 }
-	 else if (pTemp1 == tail && pTemp2 != NULL)
+	 //2个节点都找得到，并且其中一个是尾指针 || 只找到一个节点，另一个下标过大，将其跟尾交换
+	 else if (pTemp1 == tail && pTemp2 != nullptr)
 	 {
-		 if (pTemp1 != NULL)
+		 if (pTemp1 != nullptr)
 		 {
 			 pTemp1->next = pTemp2->next;
 			 pTemp2->next = pTemp1->next;
 			 pTemp1->next->next = pTemp2->next->next;
-			 pTemp2->next->next = NULL;
+			 pTemp2->next->next = nullptr;
 			 pTemp2->next = tail;
 			 return;
 		 }
 	 }
-	 else if (pTemp1 != NULL && pTemp2 == tail)
+	 else if (pTemp1 != nullptr && pTemp2 == tail)
 	 {
-		 if (pTemp2 != NULL)
+		 if (pTemp2 != nullptr)
 		 {
 			 pTemp1->next = pTemp2->next;
 			 pTemp2->next = pTemp1->next;
 			 pTemp2->next->next = pTemp1->next->next;
-			 pTemp1->next->next = NULL;
+			 pTemp1->next->next = nullptr;
 			 pTemp1->next = tail;
 			 return;
 		 }
@@ -361,5 +300,51 @@ using namespace std;
 		 }
 	 }*/
  }
-
-
+ bool QGForwardList::isLoop()
+ {
+	 if (nullptr == head->next)
+		 return false;
+	 Node* p1 = head->next;
+	 Node* p2 = head->next;
+	 int i = 0;
+	 while (p1 != nullptr)
+	 {
+		 i++;
+		 if (i % 2 == 0)
+			 p2 = p2->next;
+		 if (p1 == p2)
+			 return true;
+		 p1 = p1->next->next;	//p1跑得快，p2跑得慢 
+	 }
+	 return false;
+ }
+ void QGForwardList::reverseEven()
+ {
+	 if (head->next == nullptr || head->next->next == nullptr)
+		 return;
+	 int a= 0;
+	 Node* pT = head->next;
+	 while(pT != nullptr)
+	 {
+		 a = pT->data;
+		 pT->data = pT->next->data;
+		 pT->next->data = a;
+		 pT = pT->next->next ;
+	 }
+ }
+ ElemType& QGForwardList::middleElem()
+ {
+	/* if (head->next == nullptr)
+		 return;*/
+	 unsigned int iCount = 0 ;
+	 unsigned int iNum = size();
+	 Node* pT = head->next;
+	 while (pT != nullptr)
+	 {
+		 if (iCount / 2 == iNum)
+		 {
+			 return pT->data;
+		 }
+		 iCount++; 
+	 }
+ }

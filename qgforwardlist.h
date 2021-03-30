@@ -104,7 +104,7 @@ public:
 	/*
 	 * 链表判环
 	 */
-	void isLoop();
+	bool isLoop();
 
 	/*
 	 * 偶节点反转，1234反转后变成2143

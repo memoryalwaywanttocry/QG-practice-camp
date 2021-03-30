@@ -9,11 +9,11 @@ QGList::QGList()
 	struct Node* pTemp1 = new struct Node;
 	struct Node* pTemp2 = new struct Node;
 	pTemp1->data = 0;
-	pTemp1->next = NULL;
-	pTemp1->prior = NULL;
+	pTemp1->next = nullptr;
+	pTemp1->prior = nullptr;
 	pTemp2->data = 0;
-	pTemp2->next = NULL;
-	pTemp2->prior = NULL;
+	pTemp2->next = nullptr;
+	pTemp2->prior = nullptr;
 	head = pTemp1;
 	tail = pTemp2;
 }
@@ -37,9 +37,9 @@ ElemType& QGList::back()
 {
 	return tail->prior->data;
 }
-bool QGList::push_front(ElemType& e)
+bool QGList::push_front(const ElemType& e)
 {
-	if (head->next == NULL)
+	if (head->next == nullptr)
 		return false;
 	Node* pTemp = new struct Node;
 	pTemp->data = e;
@@ -50,7 +50,7 @@ bool QGList::push_front(ElemType& e)
 }
 bool QGList::pop_front()
 {
-	if (NULL == head->next)
+	if (nullptr == head->next)
 		return false;
 	Node* pT = head->next;
 	head->next = head->next->next;
@@ -58,9 +58,9 @@ bool QGList::pop_front()
 	delete pT;
 	return true;
 }
-bool QGList::push_back(ElemType& e)
+bool QGList::push_back(const ElemType& e)
 {
-	if (NULL == head->next)
+	if (nullptr == head->next)
 		return false;
 	Node* pTemp = new struct Node;
 	pTemp->data = e;
@@ -73,7 +73,7 @@ bool QGList::push_back(ElemType& e)
 bool QGList::pop_back()
 {
 	//合法性检测 如果除了空头尾，没有别的节点，直接结束
-	if (NULL == head->next)
+	if (nullptr == head->next)
 		return false;
 	//记录最尾个
 	Node* pT = tail->prior;
@@ -85,17 +85,17 @@ bool QGList::pop_back()
 	delete pT;
 	return true;
 }
-bool QGList::insert(unsigned int index, ElemType& e)
+bool QGList::insert(unsigned int index, const ElemType& e)
 {
 	//合法性判断
-	if (NULL == head->next || index < 0)
+	if (nullptr == head->next || index < 0)
 		return false;
 	//创建节点
 	Node* pTemp = new struct Node;
 	//节点成员赋值
 	pTemp->data = e;
-	pTemp->next = NULL;
-	pTemp->prior = NULL;
+	pTemp->next = nullptr;
+	pTemp->prior = nullptr;
 	//遍历寻找第index-1个节点
 	unsigned int icount = 0;
 	Node* pT = head->next;
@@ -106,7 +106,7 @@ bool QGList::insert(unsigned int index, ElemType& e)
 		icount++;
 	}
 	//找到了，链接，没找到，结束
-	if (pT != NULL)
+	if (pT != nullptr)
 	{
 		pTemp->prior = pT;
 		pTemp->next = pT->next;
@@ -119,7 +119,7 @@ bool QGList::insert(unsigned int index, ElemType& e)
 bool QGList::erase(unsigned int index)
 {
 	//合法性判断
-	if (NULL == head->next || index < 0)
+	if (nullptr == head->next || index < 0)
 		return false;
 	//遍历寻找节点
 	unsigned int icount = 0;
@@ -130,7 +130,7 @@ bool QGList::erase(unsigned int index)
 			break;
 		icount++;
 	}
-	if (pT != NULL)
+	if (pT != nullptr)
 	{
 		pT->prior->next = pT->next;
 		pT->next->prior = pT->prior;
@@ -142,7 +142,7 @@ bool QGList::clear()
 {
 	//除了空头空尾，其他节点全部删除
 	//合法性
-	if (NULL == head->next)
+	if (nullptr == head->next)
 		return false;
 	Node* pT = head->next;
 	while (pT != tail)
@@ -151,13 +151,13 @@ bool QGList::clear()
 		pT = pT->next;
 		delete pTemp;
 	}
-	head = NULL;
-	tail = NULL;
+	head = nullptr;
+	tail = nullptr;
 	return true;
 }
-bool QGList::contain(ElemType& e)
+bool QGList::contain(const ElemType& e)
 {
-	if (NULL == head->next)
+	if (nullptr == head->next)
 		return false;
 	Node* pT = head->next;
 	while (pT != tail)
@@ -170,16 +170,16 @@ bool QGList::contain(ElemType& e)
 }
 unsigned int QGList::size()
 {
-	if (NULL == head->next)
+	if (nullptr == head->next)
 		return false;
 	unsigned int icount = 0;
 	for (Node* pT = head->next; pT != tail; pT = pT->next)
 		icount++;
 	return icount + 2;
 }
-bool QGList::traverse(void (*visit)(ElemType& e))
+bool QGList::traverse(void (*visit)(const ElemType& e))
 {
-	if (NULL == head->next)
+	if (nullptr == head->next)
 		return false;
 	for (Node* pT = head->next; pT != tail; pT = pT->next)
 	{
@@ -187,7 +187,7 @@ bool QGList::traverse(void (*visit)(ElemType& e))
 	}
 	return true;
 }
-void QGList::visit(ElemType& e)
+void QGList::visit(const ElemType& e)
 {
 	cout << e << endl;
 }

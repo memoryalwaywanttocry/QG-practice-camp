@@ -25,6 +25,7 @@ void GiveMeun()
 int main(void)
 {
 	int select = 0;//创建一个用户选择输入的变量；
+	QGList List1;
 	while (1)
 	{
 		GiveMeun();
@@ -32,22 +33,28 @@ int main(void)
 		switch (select)
 		{
 		case 1://1、 实例化一个链表对象。
-			QGList List1;
+		{
 			cout << "操作成功" << endl;
 			system("pause");
 			system("cls");
 			break;
+		}
 		case 2://2、 查看首个元素。
+		{
 			cout << List1.front() << endl;
 			system("pause");
 			system("cls");
 			break;
+		}
 		case 3://3、 查看尾个元素。
+		{
 			cout << List1.back() << endl;
 			system("pause");
 			system("cls");
 			break;
+		}
 		case 4://4、 在链表头部添加一个节点。
+		{
 			ElemType b;
 			cout << "请输入数据" << endl;
 			cin >> b;
@@ -59,7 +66,9 @@ int main(void)
 				system("cls");
 			}
 			break;
+		}
 		case 5://5、 在链表尾部添加一个节点。
+		{
 			ElemType b;
 			cout << "请输入数据" << endl;
 			cin >> b;
@@ -71,21 +80,26 @@ int main(void)
 				system("cls");
 			}
 			break;
+		}
 		case 6://6、 在指定节点前添加节点。
+		{
 			ElemType b;
 			ElemType c;
 			cout << "请输入数据" << endl;
 			cin >> b;
-			cout << "请输入节点位置"<<endl;
-			List1.insert(c,b);
-			if (List1.insert(c,b))
+			cout << "请输入节点位置" << endl;
+			cin >> c;
+			List1.insert(c, b);
+			if (List1.insert(c, b))
 			{
 				cout << "操作成功" << endl;
 				system("pause");
 				system("cls");
 			}
 			break;
+		}
 		case 7://7、 删除第一个节点。  
+		{
 			List1.pop_front();
 			if (List1.pop_front())
 			{
@@ -94,7 +108,9 @@ int main(void)
 				system("cls");
 			}
 			break;
+		}
 		case 8://8、 删除最尾的节点。  
+		{
 			List1.pop_back();
 			if (List1.pop_back())
 			{
@@ -103,7 +119,9 @@ int main(void)
 				system("cls");
 			}
 			break;
+		}
 		case 9://9、 删除指定位置的节点。			
+		{
 			ElemType b;
 			cout << "请输入节点位置" << endl;
 			cin >> b;
@@ -115,7 +133,9 @@ int main(void)
 				system("cls");
 			}
 			break;
+		}
 		case 10://10、 清空链表。
+		{
 			List1.clear();
 			if (List1.clear())
 			{
@@ -124,12 +144,13 @@ int main(void)
 				system("cls");
 			}
 			break;
+		}
 		case 11://11、查询链表节点的个数。
 			cout << List1.size() << endl;
 			break;
-		case 12://12、查看所有节点的数据。
-			List1.traverse(List1.visit);
-			break;
+		//case 12://12、查看所有节点的数据。
+		//	List1.traverse(List1.visit);
+		//	break;
 		case 0://0 、退出使用。
 			cout << "感谢使用，欢迎下次使用" << endl;
 			system("pause");
